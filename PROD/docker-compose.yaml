@@ -1,0 +1,23 @@
+services:
+  prestashop:
+    container_name: prestashop
+    image: lewap333/presta
+    restart: always
+    ports:
+      - "18442:443"
+    environment:
+      DB_SERVER: admin-mysql_db
+      DB_NAME: BE_184429
+      DB_USER: root
+      DB_PASSWD: student
+    networks:
+      - admin-mysql_default
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+networks:
+  admin-mysql_default:
+    external: true
