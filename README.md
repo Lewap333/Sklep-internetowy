@@ -1,44 +1,94 @@
-# Projekt z biznesu elektronicznego
+# Sklep internetowy
+## Opis projektu
+Projekt polegał na stworzeniu **kopii istniejącego sklepu internetowego** z wykorzystaniem **PrestaShop 1.7.8**.
+
+Projekt pochodzi z szerszego repozytorium [Repozytorium źródłowe](https://github.com/Kamil0597/Biznes.git), a tutaj zawarte są jedynie moduły, za które byłem odpowiedzialny.
+
 ## Oryginalna strona
-https://wloczkowyswiat.pl/  
+Strona źródłowa - https://wloczkowyswiat.pl/  
 Do klonowania strony wykorzystano **PrestaShop 1.7.8.11**  
 Środowisko uruchomieniowe zostało opracowane z wykorzystaniem zestawu  
 skonteneryzowanych usług zarządzanych za pomocą rozwiązania **Docker** i **docker-compose**.
-## Członokwie zespołu 
-- Kamil Lasecki
-- Jan Kalwasiński
-- Paweł Kusznierczuk
-- Jakub Kinder
-## Sposób uruchomienia
+- **Docker 26.1.3**
+- **docker-compose 1.29.2**
+
+## Podgląd sklepu
+
+<h2 align="center">Strona główna</h2>
+
+![shopPreview](https://github.com/user-attachments/assets/0faf109b-9af3-4f61-98c6-9d7d55e2bb6b)
+
+<h2 align="center">Panel administracyjny</h2>
+
+![shopPreview2](https://github.com/user-attachments/assets/450f0dfb-fbc7-491f-8791-e45655623e3d)
+
+<h2 align="center">Baza danych sklepu</h2>
+
+![shopPreview3](https://github.com/user-attachments/assets/657a67a5-6070-49b9-9a0d-6afeecfef56a)
+
+## Instalacja
+
 ### Sklonuj repozytorium  
 ~~~
-git clone https://github.com/Kamil0597/Biznes.git
+git clone https://github.com/Lewap333/Sklep-internetowy.git
 ~~~
 ### 
 
-### Wersja DEV
-#### Uruchomienie
-Przejdź do folderu DEV/configurations  
-Uruchom skrypt build.sh  
-Po uruchomieniu się kontenerów uruchom odpowiednie komendy z pliku commands.txt
-#### Zapisanie zmian
-Po wprowadzeniu zmian w sklepie przed wyłączeniem kontenerów utwórz aktualny dump bazy.  
-Komenda na utworzenie dump.sql znajduje się w pliku commands.txt
-#### Utworzenie obrazu z Dockerfile
-Przejdź do folderu DEV  
-Utwórz obraz  
+## Uruchomienie wersji DEV
+
+Poniższe kroki pozwolą na poprawne uruchomienie sklepu w środowisku deweloperskim:
+
+1. **Przejdź do folderu z plikami wersji DEV**  
+   Upewnij się, że jesteś w folderze, w którym znajdują się pliki wersji deweloperskiej:
+   ```bash
+   cd DEV
+2. **Ustaw uprawnienia dla plików sklepu**
+    ```bash
+   chmod -R 755 prestashop_files/
+3. **Build**
+  Przejdź do folderu `DEV/configurations` 
+  Uruchom skrypt build.sh
+    ~~~
+    sudo ./build.sh
+    ~~~
+### Zapisywanie zmian
+Po wprowadzeniu zmian w sklepie przed wyłączeniem kontenerów zapisz w folderze `DEV/configurations` aktualny dump bazy.  
+~~~
+sudo docker exec admin-mysql_db mariadb-dump -uroot -pstudent BE_184429 > dump.sql
+~~~
+
+### Utworzenie nowego obrazu sklepu z wykorzystaniem Dockerfile
+Przejdź do folderu **`DEV`** zawierającego plik Dockerfile
+Utworzenie obrazu 
 ~~~
 docker build -t <image_name>:<image_tag> .
 ~~~
 
-### Strona jest dostępna pod adresem  
-https://localhost:18442
-## Panel administracyjny i phpMyAdmin
+### Wersja PROD
 
-Panel administracyjny dostępny pod adresem:  
-[https://localhost:18442/](https://localhost:18442/admin-dev/)  
+W tej konfiguracji sklep został wdrożony na uczelniany klaster, korzystając z **zewnętrznej usługi MySQL** (dostarczanej przez klaster). 
+Aby uruchomić środowisko produkcyjne lokalnie, wykonaj następujące kroki:
 
-phpMyAdmin dostępny pod adresem:  
+1. **Przejdź do folderu `REMOTEDB` i uruchom skrypt build.sh**  
+   Skrypt `build.sh` utworzy lokalnie zewnętrzna bazę danych:
+   ```bash
+   cd REMOTEDB
+   sudo ./build.sh
+2. **Przejdź do folderu `PROD` i uruchom skrypt build.sh**
+   ```bash
+   cd PROD
+   sudo ./build.sh
+### Zatrzymanie i usunięcie kontenerów
+Przejdź do folderu zawierającego plik docker-compose.yaml
+~~~
+  sudo docker-compose down
+~~~
+
+### Strona główna sklepu
+https://localhost:18442/pl/
+### Panel administracyjny
+[https://localhost:18442/admin-dev/](https://localhost:18442/admin-dev/)  
+### phpMyAdmin
 [http://localhost:8081/](http://localhost:8081/)
 
 ### Dane logowania
@@ -47,6 +97,3 @@ phpMyAdmin dostępny pod adresem:
 |----------------------|------------------------------------|-------------|
 | Panel administracyjny | wloczkowyswiat.prestashop@gmail.com | prestashop |
 | phpMyAdmin           | root                              | student  |
-
-
-
